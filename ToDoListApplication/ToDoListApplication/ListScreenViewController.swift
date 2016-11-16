@@ -16,33 +16,51 @@ class ListScreenViewController: UIViewController, UITableViewDataSource, UITable
     @IBOutlet weak var listTitleLabel: UILabel!
     
     var selectedCell: ListScreenTableViewCell?
-    var selectedListIndex: Int!
+    var selectedIndex: Int?
+    var selectedCellIndex: Int?
+
 
     @IBAction func buttonWasPressed(_ sender: UIButton) {
+        
+        if userDescriptionTextField.text == "" &&  userInputListItem.text == "" {
+            //UI Alert Control code from Stack OverFlow / Online resources
+            let alert = UIAlertController(title: "Alert", message: "Please Enter List Information", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+        else if userInputListItem.text == "" {
+            //UI Alert Control code from Stack OverFlow / Online resources
+            let alert = UIAlertController(title: "Alert", message: "Please Enter A Title for Your To-Do List Item", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+            
+        else {
     
         let titleText = userInputListItem.text!
         let descriptionText = userDescriptionTextField.text!
         
         let newItem = Item(toDoListItemName: titleText, description: descriptionText)
-        lists[selectedListIndex].items.append(newItem)
+        lists[selectedIndex!].items.append(newItem)
         listTableView.reloadData()
+        }
     }
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        listTitleLabel.text = lists[selectedListIndex].toDoListTitleName
+        listTitleLabel.text = lists[selectedIndex!].toDoListTitleName
     }
 
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return lists[selectedListIndex!].items.count
+        return lists[selectedIndex!].items.count
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ListScreenTableViewCell", for: indexPath) as! ListScreenTableViewCell
-        cell.listTitleListView.text = lists[selectedListIndex].items[indexPath.row].toDoListItemName
+        cell.listTitleListView.text = lists[selectedIndex!].items[indexPath.row].toDoListItemName
        return cell
     }
     
@@ -53,23 +71,40 @@ class ListScreenViewController: UIViewController, UITableViewDataSource, UITable
         if cell === selectedCell {
             cell.backgroundColor = UIColor.white
             selectedCell = nil
-            selectedListIndex = nil
+            selectedCellIndex = nil
             
         }
         else {
             cell.backgroundColor = UIColor.lightGray
             selectedCell?.backgroundColor = UIColor.white
             selectedCell = cell
-            selectedListIndex = indexPath.item
+            selectedCellIndex = indexPath.item
+        }
+        
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        
+        if editingStyle == .delete {
+            lists[selectedCellIndex!].items.remove(at: indexPath.row)
+            userDescriptionTextField.text = ""
+            userInputListItem.text = ""
+            listTableView.reloadData()
         }
         
     }
     
     
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let detailedItem = segue.destination as! ItemViewController
+        detailedItem.selectedIndex = selectedIndex
         detailedItem.selectedItemIndex = listTableView.indexPathForSelectedRow?.row
-        detailedItem.selectedListIndex = selectedListIndex
+        
     }
 
     

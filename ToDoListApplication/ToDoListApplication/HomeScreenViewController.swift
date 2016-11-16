@@ -19,15 +19,29 @@ class HomeScreenViewController: UIViewController, UITableViewDataSource, UITable
 
     @IBAction func savedButtonWasPressed(_ sender: UIButton) {
         
-        let userInput = userInputListNameTextField.text
-        let newList = List(toDoListTitleName: userInput!)
-        lists.append(newList)
-        userInputListNameTextField.text = ""
-        homeScreenTableView.reloadData()
+        if userInputListNameTextField.text == "" {
+            
+            //UI Alert Control code from Stack OverFlow / Online resources
+            let alert = UIAlertController(title: "Alert", message: "Please Enter A List Name", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+        else {
+            let userInput = userInputListNameTextField.text
+            let newList = List(toDoListTitleName: userInput!)
+            lists.append(newList)
+            userInputListNameTextField.text = ""
+            homeScreenTableView.reloadData()
+        }
+     
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let tap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped))
+        tap.numberOfTapsRequired = 2
+        view.addGestureRecognizer(tap)
+
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -59,9 +73,29 @@ class HomeScreenViewController: UIViewController, UITableViewDataSource, UITable
         
     }
     
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        
+        if editingStyle == .delete {
+            lists.remove(at: indexPath.row)
+            homeScreenTableView.reloadData()
+        }
+
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let ListScreenViewController = segue.destination as! ListScreenViewController
-        ListScreenViewController.selectedListIndex = homeScreenTableView.indexPathForSelectedRow?.row
+        ListScreenViewController.selectedIndex = homeScreenTableView.indexPathForSelectedRow?.row
+    }
+    
+
+    
+    func doubleTapped() {
+        let attributedString = NSAttributedString(string: userInputListNameTextField.text!, attributes: [NSStrikethroughStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue])
+        homeTitleLabel.attributedText = attributedString
     }
     
     override func didReceiveMemoryWarning() {

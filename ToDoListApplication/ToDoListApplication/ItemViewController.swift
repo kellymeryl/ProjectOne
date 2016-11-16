@@ -10,25 +10,32 @@ import UIKit
 
 class ItemViewController: UIViewController {
     
+    @IBOutlet weak var titleTextField: UITextField!
     
-    @IBOutlet weak var itemDescriptionTitle: UILabel!
-    @IBOutlet weak var descriptionTitleLabel: UILabel!
+//    @IBOutlet weak var itemDescriptionTitle: UILabel!
+//    @IBOutlet weak var descriptionTitleLabel: UILabel!
     @IBOutlet weak var descriptionTextView: UITextView!
     
-    var selectedItemIndex: Int!
-    var selectedListIndex: Int!
+    var selectedIndex: Int?
+    var selectedItemIndex: Int?
+    
+    var item: Item!
 
-    @IBAction func saveButtonTapped(_ sender: Any) {
-        
-        lists[selectedListIndex].items[selectedItemIndex].toDoListItemName = descriptionTitleLabel.text!
-        lists[selectedListIndex].items[selectedItemIndex].description =  descriptionTextView.text!
+    override func viewWillDisappear(_ animated: Bool) {
+        item.toDoListItemName = titleTextField.text!
+        item.description =  descriptionTextView.text!
+
     }
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+       // guard let labelText = lists[selectedListIndex?].items[selectedItemIndex?].toDoListItemName else { return }
+       // descriptionTitleLabel.text = labelText
         
-        descriptionTitleLabel.text = lists[selectedListIndex!].items[selectedItemIndex!].toDoListItemName
-        descriptionTextView.text = lists[selectedListIndex!].items[selectedItemIndex!].description
+      item = lists[selectedIndex!].items[selectedItemIndex!]
+      titleTextField.text = item.toDoListItemName
+      descriptionTextView.text = item.description
     }
 
     override func didReceiveMemoryWarning() {
