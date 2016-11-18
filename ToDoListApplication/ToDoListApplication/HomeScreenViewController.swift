@@ -38,11 +38,7 @@ class HomeScreenViewController: UIViewController, UITableViewDataSource, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let tap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped))
-        tap.numberOfTapsRequired = 2
-        view.addGestureRecognizer(tap)
-
-    }
+       }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return lists.count
@@ -92,12 +88,6 @@ class HomeScreenViewController: UIViewController, UITableViewDataSource, UITable
     }
     
 
-    
-    func doubleTapped() {
-        let attributedString = NSAttributedString(string: userInputListNameTextField.text!, attributes: [NSStrikethroughStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue])
-        homeTitleLabel.attributedText = attributedString
-    }
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
