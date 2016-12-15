@@ -23,7 +23,7 @@ class ItemViewController: UIViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         item.toDoListItemName = titleTextField.text!
-        item.description =  descriptionTextView.text!
+        item.descript =  descriptionTextView.text!
 
     }
 

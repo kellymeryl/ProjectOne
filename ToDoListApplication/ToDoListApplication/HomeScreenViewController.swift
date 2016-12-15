@@ -14,6 +14,8 @@ class HomeScreenViewController: UIViewController, UITableViewDataSource, UITable
     @IBOutlet weak var userInputListNameTextField: UITextField!
     @IBOutlet weak var homeScreenTableView: UITableView!
     
+    let key = "persisted-data"
+    
     var selectedCell: HomeScreenTableViewCell?
     var selectedListIndex: Int?
 
@@ -30,6 +32,12 @@ class HomeScreenViewController: UIViewController, UITableViewDataSource, UITable
             let userInput = userInputListNameTextField.text
             let newList = List(toDoListTitleName: userInput!)
             lists.append(newList)
+            
+            //Save lists
+            let data = NSKeyedArchiver.archivedData(withRootObject: lists)
+            UserDefaults.standard.set(data, forKey: key)
+
+            
             userInputListNameTextField.text = ""
             homeScreenTableView.reloadData()
         }
@@ -81,6 +89,8 @@ class HomeScreenViewController: UIViewController, UITableViewDataSource, UITable
         
         if editingStyle == .delete {
             lists.remove(at: indexPath.row)
+            let data = NSKeyedArchiver.archivedData(withRootObject: lists)
+            UserDefaults.standard.set(data, forKey: key)
             homeScreenTableView.reloadData()
         }
 
