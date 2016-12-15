@@ -40,23 +40,23 @@ class Item: NSObject, NSCoding{
     
     private struct Keys {
         static let toDoListItemName = "toDoListItemName"
-        static let description = "description"
+        static let descript = "description"
     }
     
     
     private (set) var toDoListItemName: String
-    private (set) var description: String
+    private (set) var descript: String
     
     init(toDoListItemName: String, description: String){
         self.toDoListItemName = toDoListItemName
-        self.description = description
+        self.descript = description
     }
     
     required convenience init?(coder aDecoder: NSCoder) {
         
         self.init(
             toDoListItemName: aDecoder.decodeObject(forKeys: Keys.toDoListItemName) as! String,
-            description: aDecoder.decodeObject(forKey: Keys.description) as! String
+            descript: aDecoder.decodeObject(forKey: Keys.description) as! String
         )
         
     }
