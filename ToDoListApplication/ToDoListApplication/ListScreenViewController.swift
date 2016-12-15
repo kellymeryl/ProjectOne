@@ -42,6 +42,10 @@ class ListScreenViewController: UIViewController, UITableViewDataSource, UITable
         
         let newItem = Item(toDoListItemName: titleText, description: descriptionText)
         lists[selectedIndex!].items.append(newItem)
+       
+        //Save list
+        let data = NSKeyedArchiver.archivedData(withRootObject: lists)
+        UserDefaults.standard.set(data, forKey: key)
         listTableView.reloadData()
         }
     }
@@ -91,6 +95,10 @@ class ListScreenViewController: UIViewController, UITableViewDataSource, UITable
         
         if editingStyle == .delete {
             lists[selectedCellIndex!].items.remove(at: indexPath.row)
+            //Save list
+            let data = NSKeyedArchiver.archivedData(withRootObject: lists)
+            UserDefaults.standard.set(data, forKey: key)
+
             userDescriptionTextField.text = ""
             userInputListItem.text = ""
             listTableView.reloadData()

@@ -14,7 +14,6 @@ class HomeScreenViewController: UIViewController, UITableViewDataSource, UITable
     @IBOutlet weak var userInputListNameTextField: UITextField!
     @IBOutlet weak var homeScreenTableView: UITableView!
     
-    let key = "persisted-data"
     
     var selectedCell: HomeScreenTableViewCell?
     var selectedListIndex: Int?
@@ -49,6 +48,7 @@ class HomeScreenViewController: UIViewController, UITableViewDataSource, UITable
         let tap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped))
         tap.numberOfTapsRequired = 2
         view.addGestureRecognizer(tap)
+        
 
     }
     
@@ -89,6 +89,7 @@ class HomeScreenViewController: UIViewController, UITableViewDataSource, UITable
         
         if editingStyle == .delete {
             lists.remove(at: indexPath.row)
+            //Save list
             let data = NSKeyedArchiver.archivedData(withRootObject: lists)
             UserDefaults.standard.set(data, forKey: key)
             homeScreenTableView.reloadData()

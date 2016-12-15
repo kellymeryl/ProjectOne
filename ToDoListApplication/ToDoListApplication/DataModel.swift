@@ -9,6 +9,8 @@
 import Foundation
 
 var lists = [List]()
+let key = "persisted-data"
+
 
 class List: NSObject, NSCoding {
     
