@@ -37,8 +37,8 @@ class ItemViewController: UIViewController {
         item = lists[selectedIndex!].items[selectedItemIndex!]
         
         //Save item
-        let data = NSKeyedArchiver.archivedData(withRootObject: item)
-        UserDefaults.standard.set(data, forKey: key)
+        let data2 = NSKeyedArchiver.archivedData(withRootObject: item)
+        UserDefaults.standard.set(data2, forKey: key)
  
         titleTextField.text = item.toDoListItemName
         descriptionTextView.text = item.descript
